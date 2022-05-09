@@ -1,1 +1,1 @@
-# 2022-02-otus-spring-aakolychev
+# Домашние задания по курсу otus Разработчик на Spring Framework
