@@ -19,19 +19,16 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    @Transactional
     public long create(Book book) {
         return bookRepository.save(book).getId();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Book readById(long id) {
         return bookRepository.findById(id).orElseThrow();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
@@ -39,15 +36,12 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateTitle(long id, String title) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.updateTitleById(id, title);
-        } else {
-            throw new NoSuchElementException();
-        }
+        Book book = bookRepository.findById(id).orElseThrow();
+        book.setTitle(title);
+        bookRepository.save(book);
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         try {
             bookRepository.deleteById(id);

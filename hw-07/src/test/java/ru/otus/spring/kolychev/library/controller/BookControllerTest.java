@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import ru.otus.spring.kolychev.library.model.Book;
+import ru.otus.spring.kolychev.library.model.Comment;
 import ru.otus.spring.kolychev.library.repository.BookRepository;
 import ru.otus.spring.kolychev.library.repository.CommentRepository;
 import ru.otus.spring.kolychev.library.service.BookService;
@@ -82,6 +85,8 @@ class BookControllerTest {
         Book book = bookRepository.getById(Long.parseLong(EXISTING_BOOK_ID));
         bookController.deleteBook(EXISTING_BOOK_ID);
         assertThatCode(() -> bookRepository.findById(book.getId()).get()).isInstanceOf(NoSuchElementException.class);
-        assertThat(commentRepository.findCommentsByBookId(book.getId())).isEmpty();
+        Comment comment = new Comment();
+        comment.setBookId(book.getId());
+        assertThat(commentRepository.findAll(Example.of(comment, ExampleMatcher.matchingAll().withIgnorePaths("id")))).isEmpty();
     }
 }
