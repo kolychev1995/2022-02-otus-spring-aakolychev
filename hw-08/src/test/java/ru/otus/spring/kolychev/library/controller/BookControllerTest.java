@@ -1,15 +1,10 @@
 package ru.otus.spring.kolychev.library.controller;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -20,8 +15,6 @@ import ru.otus.spring.kolychev.library.model.Book;
 import ru.otus.spring.kolychev.library.model.Comment;
 import ru.otus.spring.kolychev.library.repository.BookRepository;
 import ru.otus.spring.kolychev.library.repository.CommentRepository;
-import ru.otus.spring.kolychev.library.service.BookService;
-import ru.otus.spring.kolychev.library.service.CommentService;
 import ru.otus.spring.kolychev.library.service.impl.BookServiceImpl;
 import ru.otus.spring.kolychev.library.service.impl.CommentServiceImpl;
 
@@ -31,11 +24,8 @@ import java.util.NoSuchElementException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-//@DataMongoTest(excludeAutoConfiguration = org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration.class)
 @DataMongoTest()
-@TestPropertySource(properties = "property=A")
 @Import({BookController.class, BookServiceImpl.class, CommentServiceImpl.class})
-@ExtendWith(SpringExtension.class)
 class BookControllerTest {
 
     private static final String CREATE_ERROR_MESSAGE =
