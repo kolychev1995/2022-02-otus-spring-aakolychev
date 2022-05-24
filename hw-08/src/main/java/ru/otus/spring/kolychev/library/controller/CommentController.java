@@ -44,10 +44,11 @@ public class CommentController {
         Comment comment;
         try {
             comment = new Comment( content, bookId);
-        } catch (NumberFormatException nfe) {
-            return WRONG_ID_FORMAT_MESSAGE;
+            return String.valueOf(commentService.create(comment));
+        } catch (NoSuchElementException e) {
+            return "Не найдена книга с id: " + bookId + ". Невозможно создать комментарий";
         }
-        return String.valueOf(commentService.create(comment));
+
     }
 
     @ShellMethod(key = {"updateComment", "uc"},

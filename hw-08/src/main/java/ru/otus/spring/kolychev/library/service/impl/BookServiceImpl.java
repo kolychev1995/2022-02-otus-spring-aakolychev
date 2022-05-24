@@ -3,7 +3,6 @@ package ru.otus.spring.kolychev.library.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.kolychev.library.model.Book;
 import ru.otus.spring.kolychev.library.repository.BookRepository;
 import ru.otus.spring.kolychev.library.service.BookService;
@@ -36,7 +35,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void updateTitle(String id, String title) {
         Book book = bookRepository.findById(id).orElseThrow();
         book.setTitle(title);
@@ -44,7 +42,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void deleteById(String id) {
         try {
             bookRepository.deleteById(id);
