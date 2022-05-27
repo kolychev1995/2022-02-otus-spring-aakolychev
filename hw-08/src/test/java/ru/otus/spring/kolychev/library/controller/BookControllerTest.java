@@ -27,12 +27,12 @@ class BookControllerTest {
 
     private static final String CREATE_ERROR_MESSAGE =
             "Ошибка при разборе данных книги. Данные книги должны быть в формате \"title;author1,author2;genre1,genre2\"";
-    private static final String EXISTING_BOOK = "Мифический человеко-месяц, или Как создаются программные системы\n" +
+    private static final String EXISTING_BOOK = "МИФИЧЕСКИЙ ЧЕЛОВЕКО-МЕСЯЦ, ИЛИ КАК СОЗДАЮТСЯ ПРОГРАММНЫЕ СИСТЕМЫ\n" +
                                                 "Идентификатор: %s\n" +
-                                                "Авторы: Фредерик Брукс\n" +
-                                                "Жанры: Управление проектами, Менеджмент, Разработка ПО";
+                                                "Авторы: ФРЕДЕРИК БРУКС\n" +
+                                                "Жанры: УПРАВЛЕНИЕ ПРОЕКТАМИ, МЕНЕДЖМЕНТ, РАЗРАБОТКА ПО";
     public static String EXISTING_BOOK_ID;
-    public static final String EXISTING_BOOK_TITLE = "Мифический человеко-месяц, или Как создаются программные системы";
+    public static final String EXISTING_BOOK_TITLE = "МИФИЧЕСКИЙ ЧЕЛОВЕКО-МЕСЯЦ, ИЛИ КАК СОЗДАЮТСЯ ПРОГРАММНЫЕ СИСТЕМЫ";
 
     @Autowired
     private CommentRepository commentRepository;
@@ -66,15 +66,15 @@ class BookControllerTest {
         String rowBookData = "\"title;author 1,author 2;genre 1,genre 2\"";
         String id = bookController.createBook(rowBookData);
         Book book = bookRepository.findById(id).orElseThrow();
-        assertThat(book.getTitle()).isEqualTo("title");
+        assertThat(book.getTitle()).isEqualTo("TITLE");
         assertThat(book.getAuthors()).isNotEmpty()
                                      .hasSize(2)
-                                     .anyMatch(a -> a.equals("author 1"))
-                                     .anyMatch(a -> a.equals("author 2"));
+                                     .anyMatch(a -> a.equals("AUTHOR 1"))
+                                     .anyMatch(a -> a.equals("AUTHOR 2"));
         assertThat(book.getGenres()).isNotEmpty()
                                     .hasSize(2)
-                                    .anyMatch(a -> a.equals("genre 1"))
-                                    .anyMatch(a -> a.equals("genre 2"));
+                                    .anyMatch(a -> a.equals("GENRE 1"))
+                                    .anyMatch(a -> a.equals("GENRE 2"));
     }
 
     @Test

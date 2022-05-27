@@ -9,6 +9,7 @@ import ru.otus.spring.kolychev.library.service.BookService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 @ShellComponent
 public class BookController {
 
-    public static final String WRONG_ID_FORMAT_MESSAGE = "Идентификатор книги должен состоять только из цифр";
     private final BookService bookService;
 
     @Autowired
@@ -34,10 +34,27 @@ public class BookController {
         }
     }
 
+    @ShellMethod(key = {"getBookByAuthor", "gba"}, value = "Enter author of book: gba <author>")
+    public String getBookByAuthor(@ShellOption String author) {
+       List<Book> books = bookService.getBookByAuthor(author);
+        return books.stream()
+                    .map(this::bookToPrettyString)
+                    .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()));
+    }
+
+    @ShellMethod(key = {"getAllAuthors", "gaa"}, value = "Return all authors")
+    public String getAllAuthors() {
+        List<String> authors = bookService.getAllAuthors();
+        return String.join(System.lineSeparator(), authors);
+    }
+
+
+
     @ShellMethod(key = {"getAllBook", "gab"}, value = "Return all books")
     public String getAllBook() {
         List<Book> books = bookService.getAll();
-        return books.stream().map(this::bookToPrettyString)
+        return books.stream()
+                    .map(this::bookToPrettyString)
                     .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()));
     }
 
@@ -78,15 +95,12 @@ public class BookController {
     }
 
     private Book parseBook(String rowBookData) {
-        String[] data = rowBookData.replace("\"", "")
+        String[] data = rowBookData.toUpperCase(Locale.ROOT)
+                                   .replace("\"", "")
                                    .split(";");
-//        List<Author> authors = Arrays.stream(data[1].split(","))
         List<String> authors = Arrays.stream(data[1].split(","))
-//                                     .map(e -> new Author(0L, e))
                                      .collect(Collectors.toList());
-//        List<Genre> genres = Arrays.stream(data[2].split(","))
         List<String> genres = Arrays.stream(data[2].split(","))
-//                                   .map(e -> new Genre(0L, e))
                                    .collect(Collectors.toList());
 
         return new Book(data[0], authors, genres);

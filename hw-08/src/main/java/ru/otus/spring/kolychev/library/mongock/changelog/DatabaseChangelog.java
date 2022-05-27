@@ -20,9 +20,19 @@ public class DatabaseChangelog {
 
     @ChangeSet(order = "002", id = "insertBook", author = "kolychev")
     public void insertBooks(BookRepository bookRepository, CommentRepository commentRepository) {
-        Book book = bookRepository.save(new Book("Мифический человеко-месяц, или Как создаются программные системы",
-                                                 List.of("Фредерик Брукс"),
-                                                 List.of("Управление проектами", "Менеджмент", "Разработка ПО")));
+        Book book = bookRepository.save(new Book("МИФИЧЕСКИЙ ЧЕЛОВЕКО-МЕСЯЦ, ИЛИ КАК СОЗДАЮТСЯ ПРОГРАММНЫЕ СИСТЕМЫ",
+                                                 List.of("ФРЕДЕРИК БРУКС"),
+                                                 List.of("УПРАВЛЕНИЕ ПРОЕКТАМИ", "МЕНЕДЖМЕНТ", "РАЗРАБОТКА ПО")));
         commentRepository.save(new Comment("Отличная книга", book.getId()));
+
+        Book book2 = bookRepository.save(new Book("DEADLINE. РОМАН ОБ УПРАВЛЕНИИ ПРОЕКТАМИ",
+                                                 List.of("ТОМ ДЕМАРКО"),
+                                                 List.of("УПРАВЛЕНИЕ ПРОЕКТАМИ", "МЕНЕДЖМЕНТ", "РАЗРАБОТКА ПО", "Роман")));
+        commentRepository.save(new Comment("Увлекательно", book2.getId()));
+        commentRepository.save(new Comment("Замечательно и смешно", book2.getId()));
+
+        bookRepository.save(new Book("СОВРЕМЕННЫЕ ОПЕРАЦИОННЫЕ СИСТЕМЫ",
+                                                  List.of("ТАНЕНБАУМ ЭНДРЮ", "БОС ХЕРБЕРТ"),
+                                                  List.of("ОС И СЕТИ", "COMPUTER SCIENCE")));
     }
 }

@@ -2,14 +2,16 @@ package ru.otus.spring.kolychev.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.kolychev.library.model.Book;
 import ru.otus.spring.kolychev.library.repository.BookRepository;
 import ru.otus.spring.kolychev.library.service.BookService;
 import ru.otus.spring.kolychev.library.service.CommentService;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,6 +34,29 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAll() {
         return bookRepository.findAll();
+    }
+
+    @Override
+    public List<String> getAllAuthors() {
+        return bookRepository.findAll()
+                             .stream()
+                             .map(Book::getAuthors)
+                             .flatMap(Collection::stream)
+                             .distinct()
+                             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> getBookByAuthor(String author) {
+        Book exBook = new Book();
+        exBook.setAuthors(List.of(author.toUpperCase(Locale.ROOT)));
+        final ExampleMatcher matcher = ExampleMatcher.matching()
+                                                     .withIgnoreNullValues()
+                                                     .withMatcher("authors",
+                                                                  match -> match.transform(optList -> optList.map(list -> String.join("|", (List<String>) list)
+                                                                  )).contains());
+
+        return bookRepository.findAll(Example.of(exBook, matcher));
     }
 
     @Override
