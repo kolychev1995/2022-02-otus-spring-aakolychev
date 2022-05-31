@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      database: library
+      port: 0
+  mongodb:
+    embedded:
+      version: 3.5.5
+
+  main:
+    allow-circular-references: true
+
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package:
+    - ru.otus.spring.kolychev.library.mongock.changelog
