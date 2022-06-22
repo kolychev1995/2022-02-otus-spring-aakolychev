@@ -8,7 +8,5 @@ spring:
       version: 3.5.5
 
 mongock:
-#  runner-type: InitializingBean
-#  http://localhost:8080/webjars/jquery/3.5.1/jquery.min.js
   change-logs-scan-package:
     - ru.otus.spring.kolychev.library.mongock.changelog
