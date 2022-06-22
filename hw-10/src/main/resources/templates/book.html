@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all persons</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .persons tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .persons td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        TABLE {
+            /*width: 300px; !* Ширина таблицы *!*/
+            border-collapse: collapse; /* Убираем двойные линии между ячейками */
+        }
+
+        TD, TH {
+            padding: 3px; /* Поля вокруг содержимого таблицы */
+            border: 1px solid black; /* Параметры рамки */
+        }
+
+        TH {
+            background: #b0e0e6; /* Цвет фона */
+        }
+    </style>
+    <script>
+        function buildHtmlTable2(json) {
+            let book_table = document.createElement('table');
+            buildTableHeader(book_table);
+
+            json.forEach(function (obj) {
+                let tr = document.createElement('tr');
+                tr.id = obj["id"];
+
+                let td_id = document.createElement('td');
+                td_id.appendChild(document.createTextNode(obj["id"]));
+                tr.appendChild(td_id);
+
+                let td_t = document.createElement('td');
+                td_t.appendChild(document.createTextNode(obj["title"]));
+                tr.appendChild(td_t);
+
+                let td_a = document.createElement('td');
+                td_a.appendChild(document.createTextNode(obj["authors"]));
+                tr.appendChild(td_a);
+
+                let td_g = document.createElement('td');
+                td_g.appendChild(document.createTextNode(obj["genres"]));
+                tr.appendChild(td_g);
+
+                let td_delete = document.createElement('td');
+
+                let btn = document.createElement("button");
+                btn.innerHTML = "Delete";
+                let id = obj["id"];
+                btn.onclick = function () {
+                    fetch("/v1/lib/book/" + id, {method: 'DELETE'});
+                    let tr = document.getElementById(id);
+                    book_table.removeChild(tr);
+                };
+                td_delete.appendChild(btn)
+
+                tr.appendChild(td_delete);
+
+                let td_edit = document.createElement('td');
+                let a_edit = document.createElement("a");
+                let linkText = document.createTextNode("edit");
+                a_edit.appendChild(linkText);
+                a_edit.href = "/edit?id=" + id;
+                td_edit.appendChild(a_edit);
+                tr.appendChild(td_edit);
+
+                book_table.appendChild(tr);
+            })
+            return book_table;
+        }
+
+        function buildTableHeader(book_table) {
+            let tr_header = document.createElement('tr');
+
+            let th_id = document.createElement('th');
+            th_id.appendChild(document.createTextNode("Id"));
+            tr_header.appendChild(th_id);
+
+            let th_title = document.createElement('th');
+            th_title.appendChild(document.createTextNode("Title"));
+            tr_header.appendChild(th_title);
+
+            let th_a = document.createElement('th');
+            th_a.appendChild(document.createTextNode("Authors"));
+            tr_header.appendChild(th_a);
+
+            let th_g = document.createElement('th');
+            th_g.appendChild(document.createTextNode("Genres"));
+            tr_header.appendChild(th_g);
+
+            let th_d = document.createElement('th');
+            th_d.appendChild(document.createTextNode("Deleting"));
+            tr_header.appendChild(th_d);
+
+            let th_e = document.createElement('th');
+            th_e.appendChild(document.createTextNode("Edit"));
+            tr_header.appendChild(th_e);
+
+            book_table.appendChild(tr_header);
+        }
+
+
+        async function pullTable() {
+            let response = await fetch('/v1/lib/book');
+            let json = await response.json();
+            document.body.appendChild(buildHtmlTable2(json));
+        }
+
+    </script>
+</head>
+<body>
+<h1>Library</h1>
+<h2><a href="/create">Create book</a></h2>
+<h2>Books:</h2>
+
+<script>
+    pullTable()
+</script>
+
+</body>
+</html>
