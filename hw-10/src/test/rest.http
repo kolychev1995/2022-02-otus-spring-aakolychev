@@ -1,0 +1,5 @@
+###
+GET http://localhost:8080/v1/lib/book
+
+###
+DELETE http://localhost:8080/v1/lib/book/62a3874a73e971129e9d1eef

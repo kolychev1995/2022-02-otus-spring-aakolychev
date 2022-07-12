@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+
+        .errors {
+            color: red;
+        }
+
+        INPUT {
+            width: 50%;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2><a href="/">To main page</a></h2>
+
+<!-- book edition -->
+<form id="edit-form" action="edit.html" th:action="@{/edit(id=${book.id})}" th:method="post" th:object="${book}">
+    <h3 th:text="Edit">book Info:</h3>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:value="*{id}" value="1"/>
+    </div>
+
+
+    <div class="row">
+        <label for="book-title-input">Name:</label>
+        <input id="book-title-input" name="title" type="text" th:value="*{title}" value="Title"/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-authors-input">Authors:</label>
+        <input id="book-authors-input" name="authors" type="text" th:value="*{authors}" value="John Doe"/>
+        <div class="errors" th:if="${#fields.hasErrors('authors')}" th:errors="*{authors}">Wrong authors</div>
+    </div>
+
+    <div class="row">
+        <label for="book-genres-input">Genres:</label>
+        <input id="book-genres-input" name="genres" type="text" th:value="*{genres}" value="genre"/>
+        <div class="errors" th:if="${#fields.hasErrors('genres')}" th:errors="*{genres}">Wrong genres</div>
+    </div>
+
+    <div class="row">
+        <button type="submit" th:text="Save">Save</button>
+        <a href="list.html" th:href="@{/}">
+            <button type="button" th:text="Cancel">Cancel</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>
